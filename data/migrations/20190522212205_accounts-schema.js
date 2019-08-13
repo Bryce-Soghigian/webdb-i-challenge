@@ -2,7 +2,7 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('accounts', tbl => {
     tbl.increments();
-    tbl.string('name')
+    tbl.text('name')
       .notNullable()
       .unique();
     tbl.decimal('budget')
