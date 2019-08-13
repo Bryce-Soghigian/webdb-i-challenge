@@ -28,28 +28,56 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
-  if (accountIsValid(req.body)) {
-    db('accounts')
-      .insert(req.body, 'id')
-      .then(([id]) => id)
-      .then(id => {
-        db('accounts')
-          .where({ id })
-          .first()
-          .then(account => {
-            res.status(201).json(account);
-          });
-      })
-      .catch(() => {
-        res.status(500).json({ message: 'Could not add the account' });
-      });
-  } else {
-    res.status(400).json({
-      message: 'Please provide name and budget of zero or more for the account',
-    });
-  }
-});
+// router.post('/', (req, res) => {
+//   if (accountIsValid(req.body)) {
+//     db('accounts')
+//       .insert(req.body, 'id')
+//       .then(([id]) => id)
+//       .then(id => {
+//         db('accounts')
+//           .where({ id })
+//           .first()
+//           .then(account => {
+//             res.status(201).json(account);
+//           });
+//       })
+//       .catch(() => {
+//         res.status(500).json({ message: 'Could not add the account' });
+//       });
+//   } else {
+//     res.status(400).json({
+//       message: 'Please provide name and budget of zero or more for the account',
+//     });
+//   }
+// });
+router.post ('/', (req,res) =>{
+  db(accounts)
+    .insert(req.body)
+    .then(id => {
+      res.status(201).json(id)
+    })
+
+    
+
+})
+router.put('/:id' ,(req,res) => {
+const {id} = req.params;
+db(accounts)
+  .where({id:id})
+  .update(req.body)
+  .then(count =>{
+    res.status(200).json(count)
+  })
+})
+router.delete('/:id',(req,res) => {
+  const {id} = req.params;
+  db(accounts)
+    .where({id:id})
+    .del()
+    .then(() =>{
+      res.status(200).json({message:"good job boi"})
+    })
+  })
 
 router.put('/:id', (req, res) => {
   db('accounts')
